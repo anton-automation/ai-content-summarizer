@@ -11,16 +11,9 @@ Telegram-бот для автоматического анализа текст�
 
 ## Архитектура
 
-Telegram Trigger
-↓
-IF (длина текста > 100 символов)
-↓ true                    ↓ false
-OpenAI GPT-4o-mini        "Пришли текст статьи"
-(JSON mode)
-↓
-Edit Fields (маппинг)
-↓
-Telegram (форматированный ответ)
+Telegram → IF (>100 символов) → OpenAI JSON mode → Edit Fields → Telegram
+↓ false
+"Пришли текст статьи"
 
 ## Стек
 
