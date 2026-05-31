@@ -56,7 +56,7 @@
       "typeVersion": 2.3,
       "position": [
         -400,
-        -272
+        -48
       ],
       "id": "d4939971-dd39-4f6e-a567-efaa9cc32d7d",
       "name": "OpenAI_model",
@@ -99,11 +99,210 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        256,
-        -256
+        192,
+        -48
       ],
       "id": "68201d28-4f08-4dc7-8c0e-eaf747af11b2",
       "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "Пришли текст статьи для анализа (минимум 100 символов)",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -560,
+        128
+      ],
+      "id": "2303ce40-c75c-429d-99a1-0ee9f0a1cdc3",
+      "name": "Telega_message_false",
+      "webhookId": "813cfa04-44b0-453c-9f7b-e272b2b2552b",
+      "credentials": {
+        "telegramApi": {
+          "id": "yU5QUwz2mLVivF3J",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "=📄 *Резюме:*\n{{ $json.summary }}\n\n🔑 *Ключевые тезисы:*\n{{ $json.key_points.map(p => '• ' + p).join('\\n') }}\n\n🏷 *Категория:* {{ $json.category }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        464,
+        -48
+      ],
+      "id": "01b46b17-ad64-4e3f-8e66-c830f12df5c8",
+      "name": "Telegram_message_true",
+      "webhookId": "ddbe8ca9-f9f2-44b4-92a2-c956e7d11fab",
+      "credentials": {
+        "telegramApi": {
+          "id": "yU5QUwz2mLVivF3J",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "⚠️ Не удалось обработать текст. Попробуй ещё раз через минуту.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        64,
+        128
+      ],
+      "id": "b374f8b1-a63b-4221-ba01-1add0f73c58b",
+      "name": "Telegram_error",
+      "webhookId": "0e89bb25-041a-40d8-bddf-7c5f15b1381e",
+      "credentials": {
+        "telegramApi": {
+          "id": "yU5QUwz2mLVivF3J",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "da58c901-c2f7-490e-acc2-9c93da602911",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/history",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "8ecbaf09-08e0-49f3-bb0b-dbec777bd7cf",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/start",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "213625af-b3de-4a32-b291-d69319a52b73",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/help",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -816,
+        -272
+      ],
+      "id": "ba2dd4e3-4388-4d17-9cfe-3686b5827b1b",
+      "name": "IF_router"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8",
+          "mode": "list",
+          "cachedResultName": "ai_content_summarizer_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit#gid=0"
+        },
+        "options": {
+          "returnFirstMatch": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -480,
+        -464
+      ],
+      "id": "29884109-39ab-46d7-97c2-1d4199c581bf",
+      "name": "Sheets_read_history",
+      "credentials": {
+        "googleApi": {
+          "id": "sXsHhiMSlHoNaa17",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\nconst last5 = rows.slice(-5);\n\nconst text = last5.map((row, i) => {\n  const d = row.json;\n  const date = d.timestamp ? d.timestamp.substring(0, 10) : '—';\n  return `${i + 1}. [${date}] ${d.category || '—'}\\n${d.summary || '—'}`;\n}).join('\\n\\n');\n\nreturn [{ json: { history_text: '📋 *Последние запросы:*\\n\\n' + text } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -272,
+        -464
+      ],
+      "id": "b6903f21-bbdc-4741-b0ef-731d729d3f29",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.history_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -48,
+        -464
+      ],
+      "id": "86fdf90c-f536-41c1-afab-e90ea054d81f",
+      "name": "Telegram_history",
+      "webhookId": "821ad968-f14e-4b6b-965b-6b059e6cabf7",
+      "credentials": {
+        "telegramApi": {
+          "id": "yU5QUwz2mLVivF3J",
+          "name": "Telegram account"
+        }
+      }
     },
     {
       "parameters": {
@@ -132,60 +331,45 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -608,
-        -256
+        -672,
+        -48
       ],
       "id": "87e88124-caa5-4b7d-9fbc-e1a91f03fd66",
-      "name": "If"
+      "name": "If_1"
     },
     {
       "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "Пришли текст статьи для анализа (минимум 100 символов)",
-        "additionalFields": {
-          "appendAttribution": false
-        }
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "771180ab-b8a0-460a-885a-e2f829c692aa",
+              "leftValue": "={{ $json.error.message }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
       "position": [
-        -496,
-        -80
+        -80,
+        -16
       ],
-      "id": "2303ce40-c75c-429d-99a1-0ee9f0a1cdc3",
-      "name": "Telega_message_false",
-      "webhookId": "813cfa04-44b0-453c-9f7b-e272b2b2552b",
-      "credentials": {
-        "telegramApi": {
-          "id": "yU5QUwz2mLVivF3J",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "=📄 *Резюме:*\n{{ $json.summary }}\n\n🔑 *Ключевые тезисы:*\n{{ $json.key_points.map(p => '• ' + p).join('\\n') }}\n\n🏷 *Категория:* {{ $json.category }}",
-        "additionalFields": {
-          "appendAttribution": false,
-          "parse_mode": "Markdown"
-        }
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        528,
-        -256
-      ],
-      "id": "01b46b17-ad64-4e3f-8e66-c830f12df5c8",
-      "name": "Telegram_message_true",
-      "webhookId": "ddbe8ca9-f9f2-44b4-92a2-c956e7d11fab",
-      "credentials": {
-        "telegramApi": {
-          "id": "yU5QUwz2mLVivF3J",
-          "name": "Telegram account"
-        }
-      }
+      "id": "1710330d-e39d-4c72-942e-bc305c66a5b1",
+      "name": "If_2"
     },
     {
       "parameters": {
@@ -260,11 +444,11 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        736,
-        -256
+        672,
+        -48
       ],
       "id": "87c9bb2c-3dc0-47fc-9acf-ff0f13101131",
-      "name": "Append row in sheet",
+      "name": "Google_sheet_save",
       "credentials": {
         "googleApi": {
           "id": "sXsHhiMSlHoNaa17",
@@ -283,63 +467,7 @@
           },
           "conditions": [
             {
-              "id": "771180ab-b8a0-460a-885a-e2f829c692aa",
-              "leftValue": "={{ $json.error.message }}",
-              "rightValue": "",
-              "operator": {
-                "type": "string",
-                "operation": "empty",
-                "singleValue": true
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -16,
-        -224
-      ],
-      "id": "1710330d-e39d-4c72-942e-bc305c66a5b1",
-      "name": "If1"
-    },
-    {
-      "parameters": {
-        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "⚠️ Не удалось обработать текст. Попробуй ещё раз через минуту.",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
-      "position": [
-        128,
-        -80
-      ],
-      "id": "b374f8b1-a63b-4221-ba01-1add0f73c58b",
-      "name": "Telegram_error",
-      "webhookId": "0e89bb25-041a-40d8-bddf-7c5f15b1381e",
-      "credentials": {
-        "telegramApi": {
-          "id": "yU5QUwz2mLVivF3J",
-          "name": "Telegram account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "da58c901-c2f7-490e-acc2-9c93da602911",
+              "id": "b438a4ec-26ad-417e-a49b-c4bc5289dcb9",
               "leftValue": "={{ $json.message.text }}",
               "rightValue": "/history",
               "operator": {
@@ -356,65 +484,16 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -816,
+        -608,
         -272
       ],
-      "id": "ba2dd4e3-4388-4d17-9cfe-3686b5827b1b",
-      "name": "IF_router"
-    },
-    {
-      "parameters": {
-        "authentication": "serviceAccount",
-        "documentId": {
-          "__rl": true,
-          "value": "1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8",
-          "mode": "list",
-          "cachedResultName": "ai_content_summarizer_log",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": "gid=0",
-          "mode": "list",
-          "cachedResultName": "Лист1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit#gid=0"
-        },
-        "options": {
-          "returnFirstMatch": false
-        }
-      },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
-      "position": [
-        -704,
-        -416
-      ],
-      "id": "29884109-39ab-46d7-97c2-1d4199c581bf",
-      "name": "Sheets_read_history",
-      "credentials": {
-        "googleApi": {
-          "id": "sXsHhiMSlHoNaa17",
-          "name": "Google Service Account account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const rows = $input.all();\nconst last5 = rows.slice(-5);\n\nconst text = last5.map((row, i) => {\n  const d = row.json;\n  const date = d.timestamp ? d.timestamp.substring(0, 10) : '—';\n  return `${i + 1}. [${date}] ${d.category || '—'}\\n${d.summary || '—'}`;\n}).join('\\n\\n');\n\nreturn [{ json: { history_text: '📋 *Последние запросы:*\\n\\n' + text } }];"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -496,
-        -416
-      ],
-      "id": "b6903f21-bbdc-4741-b0ef-731d729d3f29",
-      "name": "Code"
+      "id": "b08ccc84-d5f4-4bcd-be2f-4e1a8b3128ab",
+      "name": "IF_commands"
     },
     {
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "={{ $json.history_text }}",
+        "text": "👋 *Добро пожаловать!*  Я анализирую тексты и статьи с помощью AI.  *Команды:* /start — приветствие /help — список команд /history — последние 5 анализов  *Как использовать:* Отправь текст статьи (минимум 100 символов) и получи резюме, ключевые тезисы и категорию темы.",
         "additionalFields": {
           "appendAttribution": false,
           "parse_mode": "Markdown"
@@ -423,12 +502,12 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -288,
-        -416
+        -368,
+        -256
       ],
-      "id": "86fdf90c-f536-41c1-afab-e90ea054d81f",
-      "name": "Telegram_history",
-      "webhookId": "821ad968-f14e-4b6b-965b-6b059e6cabf7",
+      "id": "d617af6a-60a3-4c14-8488-85697359120e",
+      "name": "Telegram_commands",
+      "webhookId": "b6102785-7afc-44a4-8731-0cc8d8e85e55",
       "credentials": {
         "telegramApi": {
           "id": "yU5QUwz2mLVivF3J",
@@ -454,7 +533,7 @@
       "main": [
         [
           {
-            "node": "If1",
+            "node": "If_2",
             "type": "main",
             "index": 0
           }
@@ -472,47 +551,11 @@
         ]
       ]
     },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "OpenAI_model",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Telega_message_false",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Telegram_message_true": {
       "main": [
         [
           {
-            "node": "Append row in sheet",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Telegram_error",
+            "node": "Google_sheet_save",
             "type": "main",
             "index": 0
           }
@@ -523,14 +566,14 @@
       "main": [
         [
           {
-            "node": "Sheets_read_history",
+            "node": "IF_commands",
             "type": "main",
             "index": 0
           }
         ],
         [
           {
-            "node": "If",
+            "node": "If_1",
             "type": "main",
             "index": 0
           }
@@ -558,6 +601,60 @@
           }
         ]
       ]
+    },
+    "If_1": {
+      "main": [
+        [
+          {
+            "node": "OpenAI_model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telega_message_false",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If_2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram_error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF_commands": {
+      "main": [
+        [
+          {
+            "node": "Sheets_read_history",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram_commands",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -565,7 +662,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "96c4efed-28b8-498e-9e85-f16d6e6cd4e4",
+  "versionId": "0f1c9fd6-1a98-4946-8278-cf68915abecb",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e47ed2702af3c14cb76140dc624f0bb3a3113f4a0906d602a2a3f30cee2a9364"
