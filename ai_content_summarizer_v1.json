@@ -11,8 +11,8 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.3,
       "position": [
-        -912,
-        -288
+        -1024,
+        -272
       ],
       "id": "17f25949-0620-405e-a18a-9efd90016735",
       "name": "Telegram Trigger",
@@ -55,8 +55,8 @@
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.3,
       "position": [
-        -496,
-        -288
+        -400,
+        -272
       ],
       "id": "d4939971-dd39-4f6e-a567-efaa9cc32d7d",
       "name": "OpenAI_model",
@@ -99,8 +99,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        160,
-        -272
+        256,
+        -256
       ],
       "id": "68201d28-4f08-4dc7-8c0e-eaf747af11b2",
       "name": "Edit Fields"
@@ -132,8 +132,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -704,
-        -288
+        -608,
+        -256
       ],
       "id": "87e88124-caa5-4b7d-9fbc-e1a91f03fd66",
       "name": "If"
@@ -149,8 +149,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -592,
-        -96
+        -496,
+        -80
       ],
       "id": "2303ce40-c75c-429d-99a1-0ee9f0a1cdc3",
       "name": "Telega_message_false",
@@ -165,7 +165,7 @@
     {
       "parameters": {
         "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
-        "text": "=📄 *Резюме:*\n{{ $json.summary }}\n\n🔑 *Ключевые тезисы:*\n- {{ $json.key_points.join('\\n• ') }}\n\n🏷 *Категория:* {{ $json.category }}",
+        "text": "=📄 *Резюме:*\n{{ $json.summary }}\n\n🔑 *Ключевые тезисы:*\n{{ $json.key_points.map(p => '• ' + p).join('\\n') }}\n\n🏷 *Категория:* {{ $json.category }}",
         "additionalFields": {
           "appendAttribution": false,
           "parse_mode": "Markdown"
@@ -174,8 +174,8 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        432,
-        -272
+        528,
+        -256
       ],
       "id": "01b46b17-ad64-4e3f-8e66-c830f12df5c8",
       "name": "Telegram_message_true",
@@ -260,8 +260,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        640,
-        -272
+        736,
+        -256
       ],
       "id": "87c9bb2c-3dc0-47fc-9acf-ff0f13101131",
       "name": "Append row in sheet",
@@ -300,8 +300,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -112,
-        -240
+        -16,
+        -224
       ],
       "id": "1710330d-e39d-4c72-942e-bc305c66a5b1",
       "name": "If1"
@@ -315,12 +315,120 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        32,
-        -96
+        128,
+        -80
       ],
       "id": "b374f8b1-a63b-4221-ba01-1add0f73c58b",
       "name": "Telegram_error",
       "webhookId": "0e89bb25-041a-40d8-bddf-7c5f15b1381e",
+      "credentials": {
+        "telegramApi": {
+          "id": "yU5QUwz2mLVivF3J",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "da58c901-c2f7-490e-acc2-9c93da602911",
+              "leftValue": "={{ $json.message.text }}",
+              "rightValue": "/history",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -816,
+        -272
+      ],
+      "id": "ba2dd4e3-4388-4d17-9cfe-3686b5827b1b",
+      "name": "IF_router"
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "documentId": {
+          "__rl": true,
+          "value": "1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8",
+          "mode": "list",
+          "cachedResultName": "ai_content_summarizer_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit#gid=0"
+        },
+        "options": {
+          "returnFirstMatch": false
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -704,
+        -416
+      ],
+      "id": "29884109-39ab-46d7-97c2-1d4199c581bf",
+      "name": "Sheets_read_history",
+      "credentials": {
+        "googleApi": {
+          "id": "sXsHhiMSlHoNaa17",
+          "name": "Google Service Account account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all();\nconst last5 = rows.slice(-5);\n\nconst text = last5.map((row, i) => {\n  const d = row.json;\n  const date = d.timestamp ? d.timestamp.substring(0, 10) : '—';\n  return `${i + 1}. [${date}] ${d.category || '—'}\\n${d.summary || '—'}`;\n}).join('\\n\\n');\n\nreturn [{ json: { history_text: '📋 *Последние запросы:*\\n\\n' + text } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -496,
+        -416
+      ],
+      "id": "b6903f21-bbdc-4741-b0ef-731d729d3f29",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.history_text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -288,
+        -416
+      ],
+      "id": "86fdf90c-f536-41c1-afab-e90ea054d81f",
+      "name": "Telegram_history",
+      "webhookId": "821ad968-f14e-4b6b-965b-6b059e6cabf7",
       "credentials": {
         "telegramApi": {
           "id": "yU5QUwz2mLVivF3J",
@@ -335,7 +443,7 @@
       "main": [
         [
           {
-            "node": "If",
+            "node": "IF_router",
             "type": "main",
             "index": 0
           }
@@ -410,6 +518,46 @@
           }
         ]
       ]
+    },
+    "IF_router": {
+      "main": [
+        [
+          {
+            "node": "Sheets_read_history",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets_read_history": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Telegram_history",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -417,7 +565,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "56e51d5f-895c-476b-a647-98c82d152ec2",
+  "versionId": "96c4efed-28b8-498e-9e85-f16d6e6cd4e4",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e47ed2702af3c14cb76140dc624f0bb3a3113f4a0906d602a2a3f30cee2a9364"
