@@ -183,6 +183,91 @@
           "name": "Telegram account"
         }
       }
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8",
+          "mode": "list",
+          "cachedResultName": "ai_content_summarizer_log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Лист1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1EdoBw6DA8Z7ZS5GjUZjQC6Yhqlh7noskHEvxFt-A7n8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now.toISO() }}",
+            "source_text": "={{ $('Telegram Trigger').item.json.message.text }}",
+            "summary": "={{ $('Edit Fields').item.json.summary }}",
+            "category": "={{ $('Edit Fields').item.json.category }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_text",
+              "displayName": "source_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        -224
+      ],
+      "id": "87c9bb2c-3dc0-47fc-9acf-ff0f13101131",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleApi": {
+          "id": "sXsHhiMSlHoNaa17",
+          "name": "Google Service Account account"
+        }
+      }
     }
   ],
   "pinData": {},
@@ -237,6 +322,17 @@
           }
         ]
       ]
+    },
+    "Telegram_message_true": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -244,7 +340,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "fff7d611-f007-4a95-a5b3-ba71d11982aa",
+  "versionId": "05338e0f-16f0-4e33-ab9b-29c8a2ef7fcf",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "e47ed2702af3c14cb76140dc624f0bb3a3113f4a0906d602a2a3f30cee2a9364"
