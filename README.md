@@ -31,7 +31,7 @@ Telegram → IF (>100 символов) → OpenAI JSON mode → Edit Fields →
 
 ## Демо
 
-screenshots/ai_content_summarizer.png
+![ai_content_summarizer](screenshots/ai_content_summarizer.png)
 
 
 ## Бизнес-ценность
