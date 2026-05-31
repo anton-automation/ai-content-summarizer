@@ -21,6 +21,7 @@ Telegram → IF (>100 символов) → OpenAI JSON mode → Edit Fields →
 - n8n (Docker, localhost)
 - OpenAI GPT-4o-mini
 - Telegram Bot API
+- Google Sheets API (Service Account)
 
 ## Как запустить
 
