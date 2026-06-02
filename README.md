@@ -16,9 +16,12 @@ Telegram-бот для автоматического анализа текст�
 
 ## Архитектура
 
-Telegram → IF (>100 символов) → OpenAI JSON mode → Edit Fields → Telegram
-↓ false
-"Пришли текст статьи"
+```
+Telegram → IF_router (команды) → /start, /help, /history
+         → IF (>100 символов) → OpenAI JSON mode → Edit Fields → Telegram
+                ↓ false
+         "Пришли текст статьи"
+```
 
 ## Стек
 
@@ -33,12 +36,21 @@ Telegram → IF (>100 символов) → OpenAI JSON mode → Edit Fields →
 2. Добавь credentials:
    - OpenAI API key
    - Telegram Bot token
-3. Активируй workflow
+   - Google Sheets Service Account
+3. Дай доступ Service Account к таблице
+4. Активируй workflow
 
 ## Демо
 
 ![ai_content_summarizer](screenshots/ai_content_summarizer.png)
 
+## Версии
+
+### v1 (текущая)
+- JSON mode — структурированный вывод
+- Команды /start, /help, /history
+- Google Sheets логирование
+- IF роутинг команд через Switch node
 
 ## Бизнес-ценность
 
